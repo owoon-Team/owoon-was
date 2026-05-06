@@ -15,7 +15,10 @@ public enum ErrorCode {
     USER_PROFILE_NOT_FOUND(404, "회원 신체 정보를 찾을 수 없습니다."),
     DUPLICATE_EMAIL(409, "이미 사용 중인 이메일입니다."),
     DUPLICATE_USER_PROFILE(409, "이미 등록된 회원 신체 정보입니다."),
-    INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다.");
+    INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다."),
+
+    // 운동 오류
+    DUPLICATE_EXERCISE_CODE(409, "이미 등록된 운동 코드입니다.");
 
     private final int status;
     private final String message;

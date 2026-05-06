@@ -5,4 +5,4 @@ out/
 *.iml
 *.local.md
 .env
-
+.DS_Store

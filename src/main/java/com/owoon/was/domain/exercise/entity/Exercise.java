@@ -1,5 +1,6 @@
 package com.owoon.was.domain.exercise.entity;
 
+import com.owoon.was.domain.exercise.entity.enums.ExerciseCategory;
 import com.owoon.was.domain.exercise.entity.enums.ExerciseCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,13 +32,14 @@ public class Exercise {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private ExerciseCategory category;
 
     @Builder
-    private Exercise(ExerciseCode code, String name, String description) {
+    private Exercise(ExerciseCode code, String name, ExerciseCategory category) {
         this.code = code;
         this.name = name;
-        this.description = description;
+        this.category = category;
     }
 }
