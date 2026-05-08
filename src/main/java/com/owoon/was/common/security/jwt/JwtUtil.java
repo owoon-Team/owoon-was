@@ -1,5 +1,8 @@
 package com.owoon.was.common.security.jwt;
 
+import com.owoon.was.common.exception.CustomException;
+import com.owoon.was.common.exception.error.ErrorCode;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +16,8 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
+
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final SecretKey secretKey;
     private final long accessTokenExpireMs;
@@ -39,6 +44,39 @@ public class JwtUtil {
                 .expiration(expiresAt)
                 .signWith(secretKey)
                 .compact();
+    }
+
+    /**
+     * Authorization header의 bearer token에서 회원 ID를 추출한다.
+     */
+    public Long getUserId(String authorizationHeader) {
+        String token = resolveBearerToken(authorizationHeader);
+
+        try {
+            String subject = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+
+            return Long.valueOf(subject);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+    }
+
+    private String resolveBearerToken(String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        String token = authorizationHeader.substring(BEARER_PREFIX.length());
+        if (token.isBlank()) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+
+        return token;
     }
 
     private byte[] sha256(String secret) {
