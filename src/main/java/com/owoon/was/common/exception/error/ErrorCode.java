@@ -18,7 +18,12 @@ public enum ErrorCode {
     INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다."),
 
     // 운동 오류
-    DUPLICATE_EXERCISE_CODE(409, "이미 등록된 운동 코드입니다.");
+    EXERCISE_NOT_FOUND(404, "운동 종류를 찾을 수 없습니다."),
+    DUPLICATE_EXERCISE_CODE(409, "이미 등록된 운동 코드입니다."),
+
+    // 루틴 오류
+    ROUTINE_NOT_FOUND(404, "루틴을 찾을 수 없습니다."),
+    DUPLICATE_ROUTINE_EXERCISE_ORDER(409, "루틴 내 운동 순서가 중복되었습니다.");
 
     private final int status;
     private final String message;
