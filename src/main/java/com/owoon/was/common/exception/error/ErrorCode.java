@@ -7,6 +7,7 @@ public enum ErrorCode {
 
     // 공통 오류
     INVALID_INPUT_VALUE(400, "입력값이 올바르지 않습니다."),
+    INVALID_TOKEN(401, "유효하지 않은 인증 토큰입니다."),
     FORBIDDEN_ACCESS(403, "접근 권한이 없습니다."),
     RESOURCE_NOT_FOUND(404, "요청한 리소스를 찾을 수 없습니다."),
 
