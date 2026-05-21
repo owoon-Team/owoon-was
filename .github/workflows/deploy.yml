@@ -1,0 +1,16 @@
+name: Deploy to Raspberry Pi 5
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, Linux, ARM64, raspberry-pi]
+
+    steps:
+      - name: Deploy on Raspberry Pi
+        run: |
+          cd ~/owoon-was
+          ./scripts/deploy.sh
