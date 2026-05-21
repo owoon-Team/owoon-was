@@ -1,0 +1,65 @@
+services:
+  app:
+    build:
+      context: .
+    image: owoon-was:local
+    container_name: owoon-was
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-owoon}
+      DB_USERNAME: ${DB_USERNAME:-owoon}
+      DB_PASSWORD: ${DB_PASSWORD:-owoon_password}
+
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
+      JPA_SHOW_SQL: ${JPA_SHOW_SQL:-false}
+
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_ACCESS_TOKEN_EXPIRE_MS: ${JWT_ACCESS_TOKEN_EXPIRE_MS:-3600000}
+      JWT_REFRESH_TOKEN_EXPIRE_MS: ${JWT_REFRESH_TOKEN_EXPIRE_MS:-1209600000}
+
+      TZ: Asia/Seoul
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  mysql:
+    image: mysql:8.4
+    container_name: owoon-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-owoon}
+      MYSQL_USER: ${DB_USERNAME:-owoon}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-owoon_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mysql-data:
