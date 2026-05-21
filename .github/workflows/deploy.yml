@@ -1,4 +1,4 @@
-name: Deploy to Raspberry Pi 5
+name: Deploy to Rasberry Pi 5
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, Linux, ARM64, raspberry-pi]
+    runs-on: [self-hosted, Linux, ARM64, rasberry-pi]
 
     steps:
       - name: Deploy on Raspberry Pi
