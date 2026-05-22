@@ -1,9 +1,12 @@
 package com.owoon.was.domain.routinesession.dto.response;
 
+import com.owoon.was.domain.routineexerciseresult.dto.response.RoutineExerciseResultResponse;
 import com.owoon.was.domain.routinesession.entity.RoutineSession;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 public record RoutineSessionResponse(
         Long id,
@@ -18,10 +21,16 @@ public record RoutineSessionResponse(
         Integer totalDurationSeconds,
         LocalDateTime startedAt,
         LocalDateTime endedAt,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        List<RoutineExerciseResultResponse> exerciseResults
 ) {
 
     public static RoutineSessionResponse from(RoutineSession routineSession) {
+        List<RoutineExerciseResultResponse> exerciseResults = routineSession.getRoutineExerciseResults().stream()
+                .sorted(Comparator.comparing(routineExerciseResult -> routineExerciseResult.getExerciseOrderSnapshot()))
+                .map(RoutineExerciseResultResponse::from)
+                .toList();
+
         return new RoutineSessionResponse(
                 routineSession.getId(),
                 routineSession.getUser().getId(),
@@ -35,7 +44,8 @@ public record RoutineSessionResponse(
                 routineSession.getTotalDurationSeconds(),
                 routineSession.getStartedAt(),
                 routineSession.getEndedAt(),
-                routineSession.getCreatedAt()
+                routineSession.getCreatedAt(),
+                exerciseResults
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.owoon.was.domain.routinesession.entity;
 
+import com.owoon.was.domain.routineexerciseresult.entity.RoutineExerciseResult;
 import com.owoon.was.domain.routine.entity.Routine;
 import com.owoon.was.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,6 +20,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -64,6 +70,9 @@ public class RoutineSession {
     @JoinColumn(name = "routine_id", nullable = false)
     private Routine routine;
 
+    @OneToMany(mappedBy = "routineSession", cascade = ALL, orphanRemoval = true)
+    private List<RoutineExerciseResult> routineExerciseResults = new ArrayList<>();
+
     @Builder
     private RoutineSession(
             User user,
@@ -88,5 +97,10 @@ public class RoutineSession {
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void addRoutineExerciseResult(RoutineExerciseResult routineExerciseResult) {
+        routineExerciseResults.add(routineExerciseResult);
+        routineExerciseResult.assignRoutineSession(this);
     }
 }

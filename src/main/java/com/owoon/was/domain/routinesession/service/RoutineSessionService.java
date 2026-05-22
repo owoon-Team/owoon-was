@@ -3,7 +3,9 @@ package com.owoon.was.domain.routinesession.service;
 import com.owoon.was.common.exception.CustomException;
 import com.owoon.was.common.exception.error.ErrorCode;
 import com.owoon.was.domain.routine.entity.Routine;
+import com.owoon.was.domain.routine.entity.RoutineExercise;
 import com.owoon.was.domain.routine.repository.RoutineRepository;
+import com.owoon.was.domain.routineexerciseresult.entity.RoutineExerciseResult;
 import com.owoon.was.domain.routinesession.dto.request.RoutineSessionCreateRequest;
 import com.owoon.was.domain.routinesession.dto.response.RoutineSessionResponse;
 import com.owoon.was.domain.routinesession.dto.response.RoutineSessionSummaryResponse;
@@ -16,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +51,23 @@ public class RoutineSessionService {
                 .startedAt(request.startedAt())
                 .endedAt(request.endedAt())
                 .build();
+
+        Map<Long, RoutineExercise> routineExercises = routine.getRoutineExercises().stream()
+                .collect(Collectors.toMap(RoutineExercise::getId, Function.identity()));
+
+        request.exerciseResults().forEach(resultRequest -> routineSession.addRoutineExerciseResult(
+                RoutineExerciseResult.builder()
+                        .routineExercise(findRoutineExercise(routineExercises, resultRequest.routineExerciseId()))
+                        .completedReps(resultRequest.completedReps())
+                        .completedSets(resultRequest.completedSets())
+                        .normalReps(resultRequest.normalReps())
+                        .errorReps(resultRequest.errorReps())
+                        .accuracyScore(resultRequest.accuracyScore())
+                        .durationSeconds(resultRequest.durationSeconds())
+                        .startedAt(resultRequest.startedAt())
+                        .endedAt(resultRequest.endedAt())
+                        .build()
+        ));
 
         return RoutineSessionResponse.from(routineSessionRepository.save(routineSession));
     }
@@ -89,5 +111,13 @@ public class RoutineSessionService {
     private RoutineSession findRoutineSession(Long userId, Long sessionId) {
         return routineSessionRepository.findByIdAndUserId(sessionId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROUTINE_SESSION_NOT_FOUND));
+    }
+
+    private RoutineExercise findRoutineExercise(Map<Long, RoutineExercise> routineExercises, Long routineExerciseId) {
+        RoutineExercise routineExercise = routineExercises.get(routineExerciseId);
+        if (routineExercise == null) {
+            throw new CustomException(ErrorCode.ROUTINE_EXERCISE_NOT_FOUND);
+        }
+        return routineExercise;
     }
 }
