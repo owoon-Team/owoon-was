@@ -26,7 +26,8 @@ public enum ErrorCode {
     ROUTINE_NOT_FOUND(404, "루틴을 찾을 수 없습니다."),
     DUPLICATE_ROUTINE_EXERCISE_ORDER(409, "루틴 내 운동 순서가 중복되었습니다."),
     ROUTINE_EXERCISE_NOT_FOUND(404, "루틴 운동을 찾을 수 없습니다."),
-    ROUTINE_SESSION_NOT_FOUND(404, "루틴 실행 기록을 찾을 수 없습니다.");
+    ROUTINE_SESSION_NOT_FOUND(404, "루틴 실행 기록을 찾을 수 없습니다."),
+    ROUTINE_EXERCISE_RESULT_NOT_FOUND(404, "루틴 운동별 실행 결과를 찾을 수 없습니다.");
 
     private final int status;
     private final String message;
