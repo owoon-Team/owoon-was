@@ -1,12 +1,16 @@
 package com.owoon.was.domain.routinesession.dto.request;
 
+import com.owoon.was.domain.routineexerciseresult.dto.request.RoutineExerciseResultCreateRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record RoutineSessionCreateRequest(
         @NotNull(message = "루틴 ID는 필수 입력입니다.")
@@ -41,6 +45,10 @@ public record RoutineSessionCreateRequest(
         LocalDateTime startedAt,
 
         @NotNull(message = "운동 종료 시간은 필수 입력입니다.")
-        LocalDateTime endedAt
+        LocalDateTime endedAt,
+
+        @Valid
+        @NotEmpty(message = "루틴 실행 기록에는 운동별 결과가 1개 이상 포함되어야 합니다.")
+        List<RoutineExerciseResultCreateRequest> exerciseResults
 ) {
 }

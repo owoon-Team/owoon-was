@@ -21,6 +21,11 @@ public interface RoutineSessionRepository extends JpaRepository<RoutineSession, 
     /**
      * 회원 ID와 루틴 실행 기록 ID로 루틴 실행 기록을 조회한다.
      */
-    @EntityGraph(attributePaths = {"routine"})
+    @EntityGraph(attributePaths = {
+            "routine",
+            "routineExerciseResults",
+            "routineExerciseResults.routineExercise",
+            "routineExerciseResults.routineExercise.exercise"
+    })
     Optional<RoutineSession> findByIdAndUserId(Long sessionId, Long userId);
 }
