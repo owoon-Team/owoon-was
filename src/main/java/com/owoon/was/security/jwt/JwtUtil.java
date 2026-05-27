@@ -1,10 +1,12 @@
-package com.owoon.was.common.security.jwt;
+package com.owoon.was.security.jwt;
 
 import com.owoon.was.common.exception.CustomException;
 import com.owoon.was.common.exception.error.ErrorCode;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -53,14 +55,47 @@ public class JwtUtil {
         String token = resolveBearerToken(authorizationHeader);
 
         try {
-            String subject = Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload()
-                    .getSubject();
+            return Long.valueOf(getClaims(token).getSubject());
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+    }
 
-            return Long.valueOf(subject);
+    /**
+     * 요청에서 bearer token만 추출한다.
+     */
+    public String resolveToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+            return null;
+        }
+
+        String token = authorizationHeader.substring(BEARER_PREFIX.length());
+        if (token.isBlank()) {
+            return null;
+        }
+
+        return token;
+    }
+
+    /**
+     * 토큰의 유효성을 검증한다.
+     */
+    public boolean validateToken(String token) {
+        try {
+            getClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 토큰에서 이메일 claim을 추출한다.
+     */
+    public String getEmail(String token) {
+        try {
+            return getClaims(token).get("email", String.class);
         } catch (JwtException | IllegalArgumentException e) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
@@ -77,6 +112,14 @@ public class JwtUtil {
         }
 
         return token;
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private byte[] sha256(String secret) {

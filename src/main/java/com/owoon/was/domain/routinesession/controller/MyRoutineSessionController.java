@@ -1,6 +1,6 @@
 package com.owoon.was.domain.routinesession.controller;
 
-import com.owoon.was.common.security.jwt.JwtUtil;
+import com.owoon.was.security.jwt.JwtUtil;
 import com.owoon.was.domain.routinesession.controller.api.MyRoutineSessionApi;
 import com.owoon.was.domain.routinesession.dto.request.RoutineSessionCreateRequest;
 import com.owoon.was.domain.routinesession.dto.response.RoutineSessionResponse;

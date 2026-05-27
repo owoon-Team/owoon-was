@@ -2,7 +2,7 @@ package com.owoon.was.domain.user.service;
 
 import com.owoon.was.common.exception.CustomException;
 import com.owoon.was.common.exception.error.ErrorCode;
-import com.owoon.was.common.security.jwt.JwtUtil;
+import com.owoon.was.security.jwt.JwtUtil;
 import com.owoon.was.domain.user.dto.request.LoginRequest;
 import com.owoon.was.domain.user.dto.request.UserCreateRequest;
 import com.owoon.was.domain.user.dto.response.AuthResponse;
