@@ -1,5 +1,6 @@
 package com.owoon.was.domain.user.dto.response;
 
+import com.owoon.was.common.enums.dto.response.EnumResponse;
 import com.owoon.was.domain.user.entity.UserProfile;
 
 import java.math.BigDecimal;
