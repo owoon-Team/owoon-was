@@ -1,6 +1,6 @@
 package com.owoon.was.domain.routine.controller;
 
-import com.owoon.was.common.security.jwt.JwtUtil;
+import com.owoon.was.security.jwt.JwtUtil;
 import com.owoon.was.domain.routine.controller.api.MyRoutineApi;
 import com.owoon.was.domain.routine.dto.response.RoutineResponse;
 import com.owoon.was.domain.routine.dto.response.RoutineSummaryResponse;

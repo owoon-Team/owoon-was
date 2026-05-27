@@ -1,6 +1,6 @@
 package com.owoon.was.domain.routineexerciseresult.controller;
 
-import com.owoon.was.common.security.jwt.JwtUtil;
+import com.owoon.was.security.jwt.JwtUtil;
 import com.owoon.was.domain.routineexerciseresult.controller.api.MyRoutineExerciseResultApi;
 import com.owoon.was.domain.routineexerciseresult.dto.response.RoutineExerciseResultResponse;
 import com.owoon.was.domain.routineexerciseresult.service.RoutineExerciseResultService;
