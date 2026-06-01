@@ -25,6 +25,7 @@ public class UserController implements UserApi {
 
     private final UserService userService;
 
+    @Override
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMyUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -32,6 +33,7 @@ public class UserController implements UserApi {
         return ResponseEntity.ok(userService.getUser(userDetails.getUserId()));
     }
 
+    @Override
     @PostMapping("/me/profile")
     public ResponseEntity<UserProfileResponse> createMyUserProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -41,6 +43,7 @@ public class UserController implements UserApi {
                 .body(userService.createUserProfile(userDetails.getUserId(), request));
     }
 
+    @Override
     @GetMapping("/me/profile")
     public ResponseEntity<UserProfileResponse> getMyUserProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails
