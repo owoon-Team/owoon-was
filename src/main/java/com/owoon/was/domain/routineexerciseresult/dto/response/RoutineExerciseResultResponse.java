@@ -1,9 +1,13 @@
 package com.owoon.was.domain.routineexerciseresult.dto.response;
 
+import com.owoon.was.domain.postureerrorlog.dto.response.PostureErrorLogResponse;
+import com.owoon.was.domain.postureerrorlog.entity.PostureErrorLog;
 import com.owoon.was.domain.routineexerciseresult.entity.RoutineExerciseResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 public record RoutineExerciseResultResponse(
         Long id,
@@ -22,10 +26,18 @@ public record RoutineExerciseResultResponse(
         Integer durationSeconds,
         LocalDateTime startedAt,
         LocalDateTime endedAt,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        List<PostureErrorLogResponse> postureErrorLogs
 ) {
 
     public static RoutineExerciseResultResponse from(RoutineExerciseResult routineExerciseResult) {
+        List<PostureErrorLogResponse> postureErrorLogs = routineExerciseResult.getPostureErrorLogs().stream()
+                .sorted(Comparator
+                        .comparing(PostureErrorLog::getSetNumber)
+                        .thenComparing(PostureErrorLog::getRepNumber))
+                .map(PostureErrorLogResponse::from)
+                .toList();
+
         return new RoutineExerciseResultResponse(
                 routineExerciseResult.getId(),
                 routineExerciseResult.getRoutineExercise().getId(),
@@ -43,7 +55,8 @@ public record RoutineExerciseResultResponse(
                 routineExerciseResult.getDurationSeconds(),
                 routineExerciseResult.getStartedAt(),
                 routineExerciseResult.getEndedAt(),
-                routineExerciseResult.getCreatedAt()
+                routineExerciseResult.getCreatedAt(),
+                postureErrorLogs
         );
     }
 }
