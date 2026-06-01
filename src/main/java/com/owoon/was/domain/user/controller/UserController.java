@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,15 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @PutMapping("/me/profile")
+    public ResponseEntity<UserProfileResponse> updateMyUserProfile(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid UserProfileCreateRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUserProfile(userDetails.getUserId(), request));
+    }
+
+    @Override
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUser(userId));
@@ -70,5 +80,14 @@ public class UserController implements UserApi {
     @GetMapping("/{userId}/profile")
     public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserProfile(userId));
+    }
+
+    @Override
+    @PutMapping("/{userId}/profile")
+    public ResponseEntity<UserProfileResponse> updateUserProfile(
+            @PathVariable Long userId,
+            @RequestBody @Valid UserProfileCreateRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUserProfile(userId, request));
     }
 }

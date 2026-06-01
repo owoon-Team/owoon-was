@@ -60,6 +60,21 @@ public interface UserApi {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 
+    @Operation(summary = "내 신체 정보 수정", description = "Authorization header의 access token으로 내 신체 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = UserProfileResponse.class))),
+            @ApiResponse(responseCode = "400", description = "입력값 검증 실패"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "회원 또는 신체 정보를 찾을 수 없음")
+    })
+    ResponseEntity<UserProfileResponse> updateMyUserProfile(
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Parameter(description = "수정할 회원 신체 정보")
+            @RequestBody @Valid UserProfileCreateRequest request
+    );
+
     @Operation(summary = "회원 기본 정보 조회", description = "회원 ID로 기본 정보를 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
@@ -95,5 +110,19 @@ public interface UserApi {
     ResponseEntity<UserProfileResponse> getUserProfile(
             @Parameter(description = "회원 ID", required = true, example = "1")
             @PathVariable Long userId
+    );
+
+    @Operation(summary = "회원 신체 정보 수정", description = "회원 ID로 신체 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = UserProfileResponse.class))),
+            @ApiResponse(responseCode = "400", description = "입력값 검증 실패"),
+            @ApiResponse(responseCode = "404", description = "회원 또는 신체 정보를 찾을 수 없음")
+    })
+    ResponseEntity<UserProfileResponse> updateUserProfile(
+            @Parameter(description = "회원 ID", required = true, example = "1")
+            @PathVariable Long userId,
+            @Parameter(description = "수정할 회원 신체 정보")
+            @RequestBody @Valid UserProfileCreateRequest request
     );
 }

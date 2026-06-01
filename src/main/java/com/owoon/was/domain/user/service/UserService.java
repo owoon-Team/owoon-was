@@ -60,6 +60,28 @@ public class UserService {
         return UserProfileResponse.from(userProfile);
     }
 
+    /**
+     * 회원 ID로 신체 정보를 수정한다.
+     */
+    @Transactional
+    public UserProfileResponse updateUserProfile(Long userId, UserProfileCreateRequest request) {
+        findUser(userId);
+
+        UserProfile userProfile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_PROFILE_NOT_FOUND));
+
+        userProfile.update(
+                request.exerciseLevel(),
+                request.birthDate(),
+                request.heightCm(),
+                request.weightKg(),
+                request.gender(),
+                request.mainGoal()
+        );
+
+        return UserProfileResponse.from(userProfile);
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
