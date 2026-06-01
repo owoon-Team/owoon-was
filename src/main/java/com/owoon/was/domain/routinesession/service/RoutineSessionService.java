@@ -2,6 +2,7 @@ package com.owoon.was.domain.routinesession.service;
 
 import com.owoon.was.common.exception.CustomException;
 import com.owoon.was.common.exception.error.ErrorCode;
+import com.owoon.was.domain.feedbacklog.entity.FeedbackLog;
 import com.owoon.was.domain.postureerrorlog.entity.PostureErrorLog;
 import com.owoon.was.domain.routine.entity.Routine;
 import com.owoon.was.domain.routine.entity.RoutineExercise;
@@ -76,6 +77,19 @@ public class RoutineSessionService {
                                 .repNumber(errorLogRequest.repNumber())
                                 .errorType(errorLogRequest.errorType())
                                 .errorMessage(errorLogRequest.errorMessage())
+                                .build())
+                );
+            }
+
+            if (resultRequest.feedbackLogs() != null) {
+                resultRequest.feedbackLogs().forEach(feedbackLogRequest ->
+                        routineExerciseResult.addFeedbackLog(FeedbackLog.builder()
+                                .setNumber(feedbackLogRequest.setNumber())
+                                .repNumber(feedbackLogRequest.repNumber())
+                                .feedbackType(feedbackLogRequest.feedbackType())
+                                .feedbackMessage(feedbackLogRequest.feedbackMessage())
+                                .severity(feedbackLogRequest.severity())
+                                .feedbackSource(feedbackLogRequest.feedbackSource())
                                 .build())
                 );
             }

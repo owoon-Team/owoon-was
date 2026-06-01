@@ -4,6 +4,8 @@ import com.owoon.was.common.enums.dto.response.EnumGroupResponse;
 import com.owoon.was.common.enums.dto.response.EnumResponse;
 import com.owoon.was.domain.exercise.entity.enums.ExerciseCategory;
 import com.owoon.was.domain.exercise.entity.enums.ExerciseCode;
+import com.owoon.was.domain.feedbacklog.entity.enums.FeedbackSeverity;
+import com.owoon.was.domain.feedbacklog.entity.enums.FeedbackSource;
 import com.owoon.was.domain.user.entity.enums.ExerciseLevel;
 import com.owoon.was.domain.user.entity.enums.Gender;
 import com.owoon.was.domain.user.entity.enums.MainGoal;
@@ -24,7 +26,9 @@ public class EnumService {
                 toResponses(Gender.values()),
                 toResponses(MainGoal.values()),
                 toResponses(ExerciseCode.values()),
-                toResponses(ExerciseCategory.values())
+                toResponses(ExerciseCategory.values()),
+                toResponses(FeedbackSeverity.values()),
+                toResponses(FeedbackSource.values())
         );
     }
 
@@ -53,6 +57,18 @@ public class EnumService {
     }
 
     private List<EnumResponse> toResponses(ExerciseCategory[] values) {
+        return Arrays.stream(values)
+                .map(EnumResponse::from)
+                .toList();
+    }
+
+    private List<EnumResponse> toResponses(FeedbackSeverity[] values) {
+        return Arrays.stream(values)
+                .map(EnumResponse::from)
+                .toList();
+    }
+
+    private List<EnumResponse> toResponses(FeedbackSource[] values) {
         return Arrays.stream(values)
                 .map(EnumResponse::from)
                 .toList();

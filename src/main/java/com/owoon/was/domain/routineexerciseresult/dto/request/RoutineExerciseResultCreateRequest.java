@@ -1,5 +1,6 @@
 package com.owoon.was.domain.routineexerciseresult.dto.request;
 
+import com.owoon.was.domain.feedbacklog.dto.request.FeedbackLogCreateRequest;
 import com.owoon.was.domain.postureerrorlog.dto.request.PostureErrorLogCreateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
@@ -47,6 +48,9 @@ public record RoutineExerciseResultCreateRequest(
         LocalDateTime endedAt,
 
         @Valid
-        List<PostureErrorLogCreateRequest> postureErrorLogs
+        List<PostureErrorLogCreateRequest> postureErrorLogs,
+
+        @Valid
+        List<FeedbackLogCreateRequest> feedbackLogs
 ) {
 }
