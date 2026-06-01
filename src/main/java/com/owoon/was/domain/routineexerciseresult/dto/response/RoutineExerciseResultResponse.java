@@ -1,5 +1,7 @@
 package com.owoon.was.domain.routineexerciseresult.dto.response;
 
+import com.owoon.was.domain.feedbacklog.dto.response.FeedbackLogResponse;
+import com.owoon.was.domain.feedbacklog.entity.FeedbackLog;
 import com.owoon.was.domain.postureerrorlog.dto.response.PostureErrorLogResponse;
 import com.owoon.was.domain.postureerrorlog.entity.PostureErrorLog;
 import com.owoon.was.domain.routineexerciseresult.entity.RoutineExerciseResult;
@@ -27,7 +29,8 @@ public record RoutineExerciseResultResponse(
         LocalDateTime startedAt,
         LocalDateTime endedAt,
         LocalDateTime createdAt,
-        List<PostureErrorLogResponse> postureErrorLogs
+        List<PostureErrorLogResponse> postureErrorLogs,
+        List<FeedbackLogResponse> feedbackLogs
 ) {
 
     public static RoutineExerciseResultResponse from(RoutineExerciseResult routineExerciseResult) {
@@ -36,6 +39,13 @@ public record RoutineExerciseResultResponse(
                         .comparing(PostureErrorLog::getSetNumber)
                         .thenComparing(PostureErrorLog::getRepNumber))
                 .map(PostureErrorLogResponse::from)
+                .toList();
+
+        List<FeedbackLogResponse> feedbackLogs = routineExerciseResult.getFeedbackLogs().stream()
+                .sorted(Comparator
+                        .comparing(FeedbackLog::getCreatedAt)
+                        .thenComparing(FeedbackLog::getId, Comparator.nullsLast(Long::compareTo)))
+                .map(FeedbackLogResponse::from)
                 .toList();
 
         return new RoutineExerciseResultResponse(
@@ -56,7 +66,8 @@ public record RoutineExerciseResultResponse(
                 routineExerciseResult.getStartedAt(),
                 routineExerciseResult.getEndedAt(),
                 routineExerciseResult.getCreatedAt(),
-                postureErrorLogs
+                postureErrorLogs,
+                feedbackLogs
         );
     }
 }
