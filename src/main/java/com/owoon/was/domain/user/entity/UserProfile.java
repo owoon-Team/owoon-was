@@ -80,4 +80,20 @@ public class UserProfile {
         this.mainGoal = mainGoal;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void update(
+            ExerciseLevel exerciseLevel,
+            LocalDate birthDate,
+            BigDecimal heightCm,
+            BigDecimal weightKg,
+            Gender gender,
+            MainGoal mainGoal
+    ) {
+        this.exerciseLevel = exerciseLevel;
+        this.birthDate = birthDate;
+        this.heightCm = heightCm;
+        this.weightKg = weightKg;
+        this.gender = gender;
+        this.mainGoal = mainGoal;
+    }
 }
