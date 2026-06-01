@@ -1,5 +1,6 @@
 package com.owoon.was.domain.routineexerciseresult.entity;
 
+import com.owoon.was.domain.feedbacklog.entity.FeedbackLog;
 import com.owoon.was.domain.postureerrorlog.entity.PostureErrorLog;
 import com.owoon.was.domain.routine.entity.RoutineExercise;
 import com.owoon.was.domain.routinesession.entity.RoutineSession;
@@ -85,6 +86,9 @@ public class RoutineExerciseResult {
     @OneToMany(mappedBy = "routineExerciseResult", cascade = ALL, orphanRemoval = true)
     private List<PostureErrorLog> postureErrorLogs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "routineExerciseResult", cascade = ALL, orphanRemoval = true)
+    private List<FeedbackLog> feedbackLogs = new ArrayList<>();
+
     @Builder
     private RoutineExerciseResult(
             RoutineExercise routineExercise,
@@ -120,5 +124,10 @@ public class RoutineExerciseResult {
     public void addPostureErrorLog(PostureErrorLog postureErrorLog) {
         postureErrorLogs.add(postureErrorLog);
         postureErrorLog.assignRoutineExerciseResult(this);
+    }
+
+    public void addFeedbackLog(FeedbackLog feedbackLog) {
+        feedbackLogs.add(feedbackLog);
+        feedbackLog.assignRoutineExerciseResult(this);
     }
 }
