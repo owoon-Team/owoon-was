@@ -1,5 +1,7 @@
 package com.owoon.was.domain.routineexerciseresult.dto.request;
 
+import com.owoon.was.domain.postureerrorlog.dto.request.PostureErrorLogCreateRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record RoutineExerciseResultCreateRequest(
         @NotNull(message = "루틴 운동 ID는 필수 입력입니다.")
@@ -41,6 +44,9 @@ public record RoutineExerciseResultCreateRequest(
         LocalDateTime startedAt,
 
         @NotNull(message = "운동 종료 시간은 필수 입력입니다.")
-        LocalDateTime endedAt
+        LocalDateTime endedAt,
+
+        @Valid
+        List<PostureErrorLogCreateRequest> postureErrorLogs
 ) {
 }
