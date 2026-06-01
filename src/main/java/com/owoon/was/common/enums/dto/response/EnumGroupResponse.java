@@ -7,6 +7,8 @@ public record EnumGroupResponse(
         List<EnumResponse> genders,
         List<EnumResponse> mainGoals,
         List<EnumResponse> exerciseCodes,
-        List<EnumResponse> exerciseCategories
+        List<EnumResponse> exerciseCategories,
+        List<EnumResponse> feedbackSeverities,
+        List<EnumResponse> feedbackSources
 ) {
 }
