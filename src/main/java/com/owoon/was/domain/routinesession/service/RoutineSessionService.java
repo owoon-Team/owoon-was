@@ -2,6 +2,7 @@ package com.owoon.was.domain.routinesession.service;
 
 import com.owoon.was.common.exception.CustomException;
 import com.owoon.was.common.exception.error.ErrorCode;
+import com.owoon.was.domain.postureerrorlog.entity.PostureErrorLog;
 import com.owoon.was.domain.routine.entity.Routine;
 import com.owoon.was.domain.routine.entity.RoutineExercise;
 import com.owoon.was.domain.routine.repository.RoutineRepository;
@@ -55,8 +56,8 @@ public class RoutineSessionService {
         Map<Long, RoutineExercise> routineExercises = routine.getRoutineExercises().stream()
                 .collect(Collectors.toMap(RoutineExercise::getId, Function.identity()));
 
-        request.exerciseResults().forEach(resultRequest -> routineSession.addRoutineExerciseResult(
-                RoutineExerciseResult.builder()
+        request.exerciseResults().forEach(resultRequest -> {
+            RoutineExerciseResult routineExerciseResult = RoutineExerciseResult.builder()
                         .routineExercise(findRoutineExercise(routineExercises, resultRequest.routineExerciseId()))
                         .completedReps(resultRequest.completedReps())
                         .completedSets(resultRequest.completedSets())
@@ -66,8 +67,21 @@ public class RoutineSessionService {
                         .durationSeconds(resultRequest.durationSeconds())
                         .startedAt(resultRequest.startedAt())
                         .endedAt(resultRequest.endedAt())
-                        .build()
-        ));
+                        .build();
+
+            if (resultRequest.postureErrorLogs() != null) {
+                resultRequest.postureErrorLogs().forEach(errorLogRequest ->
+                        routineExerciseResult.addPostureErrorLog(PostureErrorLog.builder()
+                                .setNumber(errorLogRequest.setNumber())
+                                .repNumber(errorLogRequest.repNumber())
+                                .errorType(errorLogRequest.errorType())
+                                .errorMessage(errorLogRequest.errorMessage())
+                                .build())
+                );
+            }
+
+            routineSession.addRoutineExerciseResult(routineExerciseResult);
+        });
 
         return RoutineSessionResponse.from(routineSessionRepository.save(routineSession));
     }

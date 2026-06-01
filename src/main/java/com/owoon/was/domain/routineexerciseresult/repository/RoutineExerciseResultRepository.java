@@ -30,4 +30,13 @@ public interface RoutineExerciseResultRepository extends JpaRepository<RoutineEx
             Long sessionId,
             Long userId
     );
+
+    /**
+     * 회원 ID와 루틴 실행 기록 ID, 운동별 실행 결과 ID로 운동별 실행 결과 존재 여부를 확인한다.
+     */
+    boolean existsByIdAndRoutineSessionIdAndRoutineSessionUserId(
+            Long resultId,
+            Long sessionId,
+            Long userId
+    );
 }
