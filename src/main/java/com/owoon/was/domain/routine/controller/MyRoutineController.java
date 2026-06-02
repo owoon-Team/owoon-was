@@ -1,15 +1,19 @@
 package com.owoon.was.domain.routine.controller;
 
 import com.owoon.was.domain.routine.controller.api.MyRoutineApi;
+import com.owoon.was.domain.routine.dto.request.RoutineCreateRequest;
 import com.owoon.was.domain.routine.dto.response.RoutineResponse;
 import com.owoon.was.domain.routine.dto.response.RoutineSummaryResponse;
 import com.owoon.was.domain.routine.service.RoutineService;
 import com.owoon.was.security.userdetails.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +41,15 @@ public class MyRoutineController implements MyRoutineApi {
             @PathVariable Long routineId
     ) {
         return ResponseEntity.ok(routineService.getRoutine(userDetails.getUserId(), routineId));
+    }
+
+    @Override
+    @PutMapping("/{routineId}")
+    public ResponseEntity<RoutineResponse> updateMyRoutine(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long routineId,
+            @RequestBody @Valid RoutineCreateRequest request
+    ) {
+        return ResponseEntity.ok(routineService.updateRoutine(userDetails.getUserId(), routineId, request));
     }
 }

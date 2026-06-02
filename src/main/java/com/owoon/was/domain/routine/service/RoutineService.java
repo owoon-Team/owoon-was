@@ -44,17 +44,30 @@ public class RoutineService {
                 .description(request.description())
                 .build();
 
-        request.exercises().forEach(exerciseRequest -> routine.addRoutineExercise(
-                RoutineExercise.builder()
-                        .exercise(findExercise(exerciseRequest.exerciseId()))
-                        .exerciseOrder(exerciseRequest.exerciseOrder())
-                        .targetReps(exerciseRequest.targetReps())
-                        .targetSets(exerciseRequest.targetSets())
-                        .restSeconds(exerciseRequest.restSeconds())
-                        .build()
-        ));
+        request.exercises().forEach(exerciseRequest ->
+                routine.addRoutineExercise(createRoutineExercise(exerciseRequest))
+        );
 
         return RoutineResponse.from(routineRepository.save(routine));
+    }
+
+    /**
+     * 회원 ID와 루틴 ID로 루틴 기본 정보와 포함 운동 목록을 수정한다.
+     */
+    @Transactional
+    public RoutineResponse updateRoutine(Long userId, Long routineId, RoutineCreateRequest request) {
+        validateUserExists(userId);
+        validateExerciseOrders(request.exercises());
+
+        Routine routine = findRoutine(userId, routineId);
+        routine.update(request.name(), request.description());
+        routine.clearRoutineExercises();
+
+        request.exercises().forEach(exerciseRequest ->
+                routine.addRoutineExercise(createRoutineExercise(exerciseRequest))
+        );
+
+        return RoutineResponse.from(routine);
     }
 
     /**
@@ -105,6 +118,16 @@ public class RoutineService {
     private Routine findRoutine(Long userId, Long routineId) {
         return routineRepository.findByIdAndUserId(routineId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROUTINE_NOT_FOUND));
+    }
+
+    private RoutineExercise createRoutineExercise(RoutineExerciseCreateRequest exerciseRequest) {
+        return RoutineExercise.builder()
+                .exercise(findExercise(exerciseRequest.exerciseId()))
+                .exerciseOrder(exerciseRequest.exerciseOrder())
+                .targetReps(exerciseRequest.targetReps())
+                .targetSets(exerciseRequest.targetSets())
+                .restSeconds(exerciseRequest.restSeconds())
+                .build();
     }
 
     private void validateExerciseOrders(List<RoutineExerciseCreateRequest> exercises) {
