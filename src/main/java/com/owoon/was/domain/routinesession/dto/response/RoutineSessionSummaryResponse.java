@@ -15,6 +15,7 @@ public record RoutineSessionSummaryResponse(
         Integer totalErrorReps,
         BigDecimal averageAccuracyScore,
         Integer totalDurationSeconds,
+        BigDecimal totalCaloriesBurned,
         LocalDateTime startedAt,
         LocalDateTime endedAt
 ) {
@@ -30,6 +31,7 @@ public record RoutineSessionSummaryResponse(
                 routineSession.getTotalErrorReps(),
                 routineSession.getAverageAccuracyScore(),
                 routineSession.getTotalDurationSeconds(),
+                routineSession.getTotalCaloriesBurned(),
                 routineSession.getStartedAt(),
                 routineSession.getEndedAt()
         );
