@@ -41,6 +41,10 @@ public record RoutineSessionCreateRequest(
         @Min(value = 0, message = "전체 운동 시간은 0초 이상이어야 합니다.")
         Integer totalDurationSeconds,
 
+        @NotNull(message = "전체 소모 칼로리는 필수 입력입니다.")
+        @DecimalMin(value = "0.00", message = "전체 소모 칼로리는 0 이상이어야 합니다.")
+        BigDecimal totalCaloriesBurned,
+
         @NotNull(message = "운동 시작 시간은 필수 입력입니다.")
         LocalDateTime startedAt,
 
