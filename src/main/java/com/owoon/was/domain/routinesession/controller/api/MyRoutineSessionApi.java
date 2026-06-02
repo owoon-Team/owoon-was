@@ -3,6 +3,7 @@ package com.owoon.was.domain.routinesession.controller.api;
 import com.owoon.was.domain.routinesession.dto.request.RoutineSessionCreateRequest;
 import com.owoon.was.domain.routinesession.dto.response.RoutineSessionResponse;
 import com.owoon.was.domain.routinesession.dto.response.RoutineSessionSummaryResponse;
+import com.owoon.was.security.userdetails.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,9 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public interface MyRoutineSessionApi {
             @ApiResponse(responseCode = "404", description = "회원 또는 루틴을 찾을 수 없음")
     })
     ResponseEntity<RoutineSessionResponse> createMyRoutineSession(
-            @Parameter(description = "Bearer access token", required = true)
-            @RequestHeader("Authorization") String authorizationHeader,
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Parameter(description = "루틴 실행 기록 생성 정보")
             @RequestBody @Valid RoutineSessionCreateRequest request
     );
@@ -44,8 +45,8 @@ public interface MyRoutineSessionApi {
             @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
     })
     ResponseEntity<List<RoutineSessionSummaryResponse>> getMyRoutineSessions(
-            @Parameter(description = "Bearer access token", required = true)
-            @RequestHeader("Authorization") String authorizationHeader
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 
     @Operation(summary = "내 루틴 실행 기록 상세 조회", description = "Authorization header의 access token으로 내 루틴 실행 상세 결과를 조회합니다.")
@@ -56,8 +57,8 @@ public interface MyRoutineSessionApi {
             @ApiResponse(responseCode = "404", description = "회원 또는 루틴 실행 기록을 찾을 수 없음")
     })
     ResponseEntity<RoutineSessionResponse> getMyRoutineSession(
-            @Parameter(description = "Bearer access token", required = true)
-            @RequestHeader("Authorization") String authorizationHeader,
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Parameter(description = "루틴 실행 기록 ID", required = true, example = "1")
             @PathVariable Long sessionId
     );
