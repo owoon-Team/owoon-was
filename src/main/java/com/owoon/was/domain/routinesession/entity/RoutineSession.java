@@ -53,6 +53,9 @@ public class RoutineSession {
     @Column(name = "total_duration_seconds", nullable = false)
     private Integer totalDurationSeconds;
 
+    @Column(name = "total_calories_burned", nullable = false, precision = 8, scale = 2)
+    private BigDecimal totalCaloriesBurned;
+
     @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt;
 
@@ -83,6 +86,7 @@ public class RoutineSession {
             Integer totalErrorReps,
             BigDecimal averageAccuracyScore,
             Integer totalDurationSeconds,
+            BigDecimal totalCaloriesBurned,
             LocalDateTime startedAt,
             LocalDateTime endedAt
     ) {
@@ -94,6 +98,7 @@ public class RoutineSession {
         this.totalErrorReps = totalErrorReps;
         this.averageAccuracyScore = averageAccuracyScore;
         this.totalDurationSeconds = totalDurationSeconds;
+        this.totalCaloriesBurned = totalCaloriesBurned;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.createdAt = LocalDateTime.now();
