@@ -59,6 +59,23 @@ public interface RoutineApi {
             @PathVariable Long routineId
     );
 
+    @Operation(summary = "루틴 수정", description = "회원 ID와 루틴 ID로 루틴 기본 정보와 포함 운동 목록을 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = RoutineResponse.class))),
+            @ApiResponse(responseCode = "400", description = "입력값 검증 실패"),
+            @ApiResponse(responseCode = "404", description = "회원, 루틴 또는 운동을 찾을 수 없음"),
+            @ApiResponse(responseCode = "409", description = "루틴 내 운동 순서 중복")
+    })
+    ResponseEntity<RoutineResponse> updateRoutine(
+            @Parameter(description = "회원 ID", required = true, example = "1")
+            @PathVariable Long userId,
+            @Parameter(description = "루틴 ID", required = true, example = "1")
+            @PathVariable Long routineId,
+            @Parameter(description = "수정할 루틴 정보")
+            @RequestBody @Valid RoutineCreateRequest request
+    );
+
     @Operation(summary = "루틴 삭제", description = "회원 ID와 루틴 ID로 루틴을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
