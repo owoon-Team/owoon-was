@@ -1,15 +1,15 @@
 package com.owoon.was.domain.routine.controller;
 
-import com.owoon.was.security.jwt.JwtUtil;
 import com.owoon.was.domain.routine.controller.api.MyRoutineApi;
 import com.owoon.was.domain.routine.dto.response.RoutineResponse;
 import com.owoon.was.domain.routine.dto.response.RoutineSummaryResponse;
 import com.owoon.was.domain.routine.service.RoutineService;
+import com.owoon.was.security.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,24 +21,21 @@ import java.util.List;
 public class MyRoutineController implements MyRoutineApi {
 
     private final RoutineService routineService;
-    private final JwtUtil jwtUtil;
 
     @Override
     @GetMapping
     public ResponseEntity<List<RoutineSummaryResponse>> getMyRoutines(
-            @RequestHeader("Authorization") String authorizationHeader
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        Long userId = jwtUtil.getUserId(authorizationHeader);
-        return ResponseEntity.ok(routineService.getRoutines(userId));
+        return ResponseEntity.ok(routineService.getRoutines(userDetails.getUserId()));
     }
 
     @Override
     @GetMapping("/{routineId}")
     public ResponseEntity<RoutineResponse> getMyRoutine(
-            @RequestHeader("Authorization") String authorizationHeader,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long routineId
     ) {
-        Long userId = jwtUtil.getUserId(authorizationHeader);
-        return ResponseEntity.ok(routineService.getRoutine(userId, routineId));
+        return ResponseEntity.ok(routineService.getRoutine(userDetails.getUserId(), routineId));
     }
 }

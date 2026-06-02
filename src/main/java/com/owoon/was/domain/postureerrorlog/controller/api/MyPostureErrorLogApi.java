@@ -1,6 +1,7 @@
 package com.owoon.was.domain.postureerrorlog.controller.api;
 
 import com.owoon.was.domain.postureerrorlog.dto.response.PostureErrorLogResponse;
+import com.owoon.was.security.userdetails.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,8 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public interface MyPostureErrorLogApi {
             @ApiResponse(responseCode = "404", description = "회원 또는 운동별 실행 결과를 찾을 수 없음")
     })
     ResponseEntity<List<PostureErrorLogResponse>> getMyPostureErrorLogs(
-            @Parameter(description = "Bearer access token", required = true)
-            @RequestHeader("Authorization") String authorizationHeader,
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Parameter(description = "루틴 실행 기록 ID", required = true, example = "1")
             @PathVariable Long sessionId,
             @Parameter(description = "운동별 실행 결과 ID", required = true, example = "1")
