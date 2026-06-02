@@ -50,6 +50,7 @@ public class RoutineSessionService {
                 .totalErrorReps(request.totalErrorReps())
                 .averageAccuracyScore(request.averageAccuracyScore())
                 .totalDurationSeconds(request.totalDurationSeconds())
+                .totalCaloriesBurned(request.totalCaloriesBurned())
                 .startedAt(request.startedAt())
                 .endedAt(request.endedAt())
                 .build();
