@@ -59,4 +59,13 @@ public class Routine {
         routineExercises.add(routineExercise);
         routineExercise.assignRoutine(this);
     }
+
+    public void update(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public void clearRoutineExercises() {
+        routineExercises.clear();
+    }
 }
