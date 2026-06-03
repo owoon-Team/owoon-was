@@ -39,4 +39,5 @@ public interface RoutineExerciseResultRepository extends JpaRepository<RoutineEx
             Long sessionId,
             Long userId
     );
+
 }

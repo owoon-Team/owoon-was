@@ -48,6 +48,15 @@ public class RoutineExerciseResult {
     @Column(name = "rest_seconds_snapshot")
     private Integer restSecondsSnapshot;
 
+    @Column(name = "exercise_id_snapshot", nullable = false)
+    private Long exerciseIdSnapshot;
+
+    @Column(name = "exercise_code_snapshot", nullable = false, length = 50)
+    private String exerciseCodeSnapshot;
+
+    @Column(name = "exercise_name_snapshot", nullable = false, length = 100)
+    private String exerciseNameSnapshot;
+
     @Column(name = "completed_reps", nullable = false)
     private Integer completedReps;
 
@@ -106,6 +115,9 @@ public class RoutineExerciseResult {
         this.targetRepsSnapshot = routineExercise.getTargetReps();
         this.targetSetsSnapshot = routineExercise.getTargetSets();
         this.restSecondsSnapshot = routineExercise.getRestSeconds();
+        this.exerciseIdSnapshot = routineExercise.getExercise().getId();
+        this.exerciseCodeSnapshot = routineExercise.getExercise().getCode().name();
+        this.exerciseNameSnapshot = routineExercise.getExercise().getName();
         this.completedReps = completedReps;
         this.completedSets = completedSets;
         this.normalReps = normalReps;

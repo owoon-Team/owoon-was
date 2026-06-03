@@ -56,6 +56,7 @@ public class RoutineSessionService {
                 .build();
 
         Map<Long, RoutineExercise> routineExercises = routine.getRoutineExercises().stream()
+                .filter(routineExercise -> !routineExercise.isDeleted())
                 .collect(Collectors.toMap(RoutineExercise::getId, Function.identity()));
 
         request.exerciseResults().forEach(resultRequest -> {
@@ -133,7 +134,7 @@ public class RoutineSessionService {
     }
 
     private Routine findRoutine(Long userId, Long routineId) {
-        return routineRepository.findByIdAndUserId(routineId, userId)
+        return routineRepository.findByIdAndUserIdAndDeletedAtIsNull(routineId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ROUTINE_NOT_FOUND));
     }
 
