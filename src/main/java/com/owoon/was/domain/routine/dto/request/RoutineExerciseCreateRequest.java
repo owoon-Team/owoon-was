@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record RoutineExerciseCreateRequest(
+        Long routineExerciseId,
+
         @NotNull(message = "운동 ID는 필수 입력입니다.")
         Long exerciseId,
 

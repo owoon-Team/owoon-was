@@ -14,12 +14,16 @@ public record RoutineSummaryResponse(
 ) {
 
     public static RoutineSummaryResponse from(Routine routine) {
+        int activeExerciseCount = (int) routine.getRoutineExercises().stream()
+                .filter(routineExercise -> !routineExercise.isDeleted())
+                .count();
+
         return new RoutineSummaryResponse(
                 routine.getId(),
                 routine.getUser().getId(),
                 routine.getName(),
                 routine.getDescription(),
-                routine.getRoutineExercises().size(),
+                activeExerciseCount,
                 routine.getCreatedAt()
         );
     }
