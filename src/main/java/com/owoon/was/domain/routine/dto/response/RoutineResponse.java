@@ -17,6 +17,7 @@ public record RoutineResponse(
 
     public static RoutineResponse from(Routine routine) {
         List<RoutineExerciseResponse> exercises = routine.getRoutineExercises().stream()
+                .filter(routineExercise -> !routineExercise.isDeleted())
                 .sorted(Comparator.comparing(routineExercise -> routineExercise.getExerciseOrder()))
                 .map(RoutineExerciseResponse::from)
                 .toList();

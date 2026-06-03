@@ -40,6 +40,9 @@ public class Routine {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -65,7 +68,11 @@ public class Routine {
         this.description = description;
     }
 
-    public void clearRoutineExercises() {
-        routineExercises.clear();
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
     }
 }

@@ -15,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,6 +38,9 @@ public class RoutineExercise {
 
     @Column(name = "rest_seconds")
     private Integer restSeconds;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "routine_id", nullable = false)
@@ -62,5 +67,27 @@ public class RoutineExercise {
 
     void assignRoutine(Routine routine) {
         this.routine = routine;
+    }
+
+    public void update(
+            Exercise exercise,
+            Integer exerciseOrder,
+            Integer targetReps,
+            Integer targetSets,
+            Integer restSeconds
+    ) {
+        this.exercise = exercise;
+        this.exerciseOrder = exerciseOrder;
+        this.targetReps = targetReps;
+        this.targetSets = targetSets;
+        this.restSeconds = restSeconds;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
     }
 }
